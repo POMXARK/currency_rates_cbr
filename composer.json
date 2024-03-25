@@ -9,7 +9,8 @@
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "mongodb/laravel-mongodb": "^4.2",
-        "soapbox/laravel-formatter": "^2.0"
+        "soapbox/laravel-formatter": "^2.0",
+        "ext-mongodb": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

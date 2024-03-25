@@ -10,4 +10,7 @@ class ExchangeRates extends Model
     use HasFactory;
 
     protected $connection = 'mongodb';
+    protected $collection = 'exchange_rates';
+
+    protected $guarded = [];
 }
