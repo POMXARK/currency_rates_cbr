@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\ExchangeRatesEloquentRepository;
+use App\Repositories\ExchangeRatesEloquentRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(ExchangeRatesEloquentRepositoryInterface::class,
+            ExchangeRatesEloquentRepository::class);
     }
 }
