@@ -1,0 +1,87 @@
+version: '3'
+
+services:
+
+  nginx:
+    restart: always
+    image: nginx:stable-alpine
+    container_name: ${APP_NAME}_nginx
+    ports:
+        - "8000:80"
+    links:
+        - currency_rates_cbr_backend
+        - currency_rates_cbr_queue
+    volumes:
+        - ./:/var/www
+        - ./nginx:/etc/nginx/conf.d/
+    depends_on:
+        - currency_rates_cbr_backend
+        - currency_rates_cbr_queue
+        - mongodb
+        - redis
+
+  redis:
+    restart: always
+    image: redis:7
+    container_name: redis
+    hostname: redis
+    command: redis-server
+    volumes:
+        - ./:/var/www
+
+  mongodb:
+    restart: always
+    container_name: mongodb
+    image: mongo:6-jammy
+    ports:
+      - '27017:27017'
+    volumes:
+        - ./:/var/www
+
+  currency_rates_cbr_backend:
+    restart: always
+    build:
+        args:
+            user: sammy
+            uid: 1000
+        context: .
+        dockerfile: app.Dockerfile
+    container_name: currency_rates_cbr_backend
+    depends_on:
+        - mongodb
+        - redis
+    volumes:
+        - ./:/var/www
+    env_file:
+     - .env
+    environment:
+        - REDIS_HOST=redis
+        - DB_URI=mongodb://mongodb:27017
+    command: sh -c "./post_deploy.sh"
+    ports:
+        - "9001:9000"
+
+  currency_rates_cbr_queue:
+    restart: always
+    build:
+        args:
+            user: sammy
+            uid: 1000
+        context: .
+        dockerfile: app.Dockerfile
+    container_name: currency_rates_cbr_queue
+    depends_on:
+        - currency_rates_cbr_backend
+        - mongodb
+        - redis
+    volumes:
+        - ./:/var/www
+    env_file:
+      - .env
+    environment:
+        - REDIS_HOST=redis
+        - DB_URI=mongodb://mongodb:27017
+#    command: sh -c "./post_deploy.sh"
+    command: sh -c "php artisan schedule:work"
+    expose:
+        - 9000
