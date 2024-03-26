@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Actions\ExchangeRatesAction;
+use App\Http\Controllers\Controller;
 
 class ExchangeRatesController extends Controller
 {
