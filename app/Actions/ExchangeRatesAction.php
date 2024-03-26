@@ -14,7 +14,7 @@ use SoapBox\Formatter\Formatter;
  */
 final class ExchangeRatesAction
 {
-    const SECONDS = 10;
+    const SECONDS_IN_DAY = 86400;
 
     /**
      * Репозиторий курсов валют.
@@ -28,6 +28,7 @@ final class ExchangeRatesAction
      */
     public function __construct(ExchangeRatesEloquentRepositoryInterface $exchangeRatesRepository)
     {
+        //Cache::forget('exchange_rates');
         $this->exchangeRatesRepository = $exchangeRatesRepository;
     }
 
@@ -36,9 +37,10 @@ final class ExchangeRatesAction
      */
     public function execute(string $url): ExchangeRates
     {
-        return Cache::remember('exchange_rates', self::SECONDS , function () use ($url) {
+        return Cache::remember('exchange_rates', self::SECONDS_IN_DAY , function () use ($url) {
             sleep(5); // имитация нагрузки на БД
 
+            Cache::forget('exchange_rates');
             $response = Http::get($url);
             $formatter = Formatter::make($response->body(), Formatter::XML);
             $data = $formatter->toArray();

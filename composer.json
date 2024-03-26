@@ -8,6 +8,7 @@
         "php": "^8.2",
         "ext-mongodb": "*",
         "laravel/framework": "^11.0",
+        "laravel/horizon": "^5.23",
         "laravel/tinker": "^2.9",
         "mongodb/laravel-mongodb": "^4.2",
         "predis/predis": "^2.2",
