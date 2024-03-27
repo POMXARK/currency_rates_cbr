@@ -6,5 +6,5 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(AuthMiddleware::class)->group(function () {
-    Route::get('currency_rates_daily', ExchangeRatesController::class);
+    Route::get('currency_rates_daily', ExchangeRatesController::class)->name('currency_rates_daily');
 });

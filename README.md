@@ -6,3 +6,6 @@
 - php artisan optimize
 - chmod -R 777 storage/logs
 - docker-compose up -d --build
+
+### Тестирование
+./vendor/bin/phpunit tests/.
