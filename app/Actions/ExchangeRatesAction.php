@@ -6,7 +6,6 @@ use App\Models\ExchangeRates;
 use App\Repositories\ExchangeRatesEloquentRepository;
 use App\Repositories\ExchangeRatesEloquentRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use SoapBox\Formatter\Formatter;
 
 /**
@@ -35,17 +34,15 @@ final class ExchangeRatesAction
     /**
      * Данные о курсах валют.
      */
-    public function execute(string $url): ExchangeRates
+    public function execute(string $data): ExchangeRates
     {
-        return Cache::remember('exchange_rates', self::SECONDS_IN_DAY , function () use ($url) {
+        return Cache::remember('exchange_rates', self::SECONDS_IN_DAY , function () use ($data) {
             sleep(5); // имитация нагрузки на БД
 
             Cache::forget('exchange_rates');
-            $response = Http::get($url);
-            $formatter = Formatter::make($response->body(), Formatter::XML);
-            $data = $formatter->toArray();
+            $formatter = Formatter::make($data, Formatter::XML);
 
-            return $this->exchangeRatesRepository->createFromArray(self::format($data));
+            return $this->exchangeRatesRepository->createFromArray(self::format($formatter->toArray()));
         });
     }
 

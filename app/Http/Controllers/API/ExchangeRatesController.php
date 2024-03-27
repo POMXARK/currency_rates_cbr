@@ -4,15 +4,19 @@ namespace App\Http\Controllers\API;
 
 use App\Actions\ExchangeRatesAction;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
+/**
+ * Текущие курсы валют.
+ *
+ * @see ExchangeRatesControllerTest
+ */
 class ExchangeRatesController extends Controller
 {
-    /**
-     * Текущие курсы валют.
-     */
     public function __invoke(ExchangeRatesAction $action)
     {
-        $data = $action->execute(config('app.currency_rates_daily_url'));
+        $response = Http::get(config('app.currency_rates_daily_url'));
+        $data = $action->execute($response->body());
 
         return response()->json($data);
     }
