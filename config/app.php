@@ -54,6 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'currency_rates_daily_url' => env('CURRENCY_RATES_DAILY_URL', 'http://www.cbr.ru/scripts/XML_daily.asp'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
