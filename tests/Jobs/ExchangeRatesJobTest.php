@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jobs;
 
 use App\Jobs\ExchangeRatesJob;
@@ -10,9 +12,10 @@ use Tests\TestCase;
  * Тесты заданий для работы с курсами валют.
  *
  * @group ExchangeRatesJob
+ *
  * @see ExchangeRatesJob
  */
-class ExchangeRatesJobTest  extends TestCase
+class ExchangeRatesJobTest extends TestCase
 {
     /**
      * Успешное выполнение задания.

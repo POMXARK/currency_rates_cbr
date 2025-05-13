@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Http\API;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +12,7 @@ use Tests\TestCase;
  * Тесты контроллера для работы с курсами валют.
  *
  * @group ExchangeRatesController
+ *
  * @see ExchangeRatesController
  */
 final class ExchangeRatesControllerTest extends TestCase

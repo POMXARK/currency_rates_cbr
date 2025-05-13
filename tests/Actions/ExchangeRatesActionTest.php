@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Actions;
 
 use App\Actions\ExchangeRatesAction;
@@ -10,6 +12,7 @@ use Tests\TestCase;
  * Тесты действия для работы с курсами валют.
  *
  * @group ExchangeRatesAction
+ *
  * @see ExchangeRatesAction
  */
 final class ExchangeRatesActionTest extends TestCase
