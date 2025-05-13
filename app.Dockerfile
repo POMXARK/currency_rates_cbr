@@ -1,27 +1,31 @@
 FROM php:8.2-fpm
 
-# Arguments defined in docker-compose.yml
+# Аргументы, определенные в docker-compose.yml
 ARG user
 ARG uid
 
+# Установка необходимых пакетов и расширений
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends nodejs npm libssl-dev zlib1g-dev curl git unzip libxml2-dev libpq-dev libzip-dev supervisor&& \
-    pecl install apcu  --onlyreqdep --force redis mongodb && \
-    docker-php-ext-configure pcntl --enable-pcntl && \
-    docker-php-ext-enable redis mongodb && \
-    docker-php-ext-install pcntl && \
+    apt-get install -y --no-install-recommends \
+        nodejs npm libssl-dev zlib1g-dev curl git unzip libxml2-dev libpq-dev libzip-dev supervisor && \
+    pecl install mongodb-1.17.0 && \
+    pecl install redis && \
+    docker-php-ext-install zip pcntl && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Get latest Composer
+# Включение расширений вручную
+RUN echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongodb.ini && \
+    echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
+
+# Получение последней версии Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
+# Создание системного пользователя
+RUN useradd -G www-data,root -u $uid -d /home/$user $user && \
+    mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-
-# Set working directory
+# Установка рабочей директории
 WORKDIR /var/www
 
 USER $user

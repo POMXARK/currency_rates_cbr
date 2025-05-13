@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories;
 
 use App\Models\ExchangeRates;
@@ -11,11 +13,14 @@ class ExchangeRatesEloquentRepository implements ExchangeRatesEloquentRepository
 {
     /**
      * Создание модели из массива.
+     *
+     * @param array<string, mixed> $data
      */
     public function createFromArray(array $data): ExchangeRates
     {
-        /** @var ExchangeRates */
-        return ExchangeRates::query()
-            ->create($data);
+        /** @var ExchangeRates $exchangeRate */
+        $exchangeRate = ExchangeRates::query()->create($data);
+
+        return $exchangeRate;
     }
 }

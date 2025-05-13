@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Actions\ExchangeRatesAction;
@@ -17,14 +19,25 @@ use Illuminate\Support\Facades\Http;
  */
 class ExchangeRatesJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Execute the job.
      */
     public function handle(ExchangeRatesAction $action): void
     {
-        $response = Http::get(config('app.currency_rates_daily_url'));
-        $action->execute($response->body());;
+        $url = config('app.currency_rates_daily_url');
+
+        // Проверка, что URL является строкой
+        if (!is_string($url)) {
+            // Обработка ошибки, если URL не является строкой
+            return;
+        }
+
+        $response = Http::get($url);
+        $action->execute($response->body());
     }
 }
